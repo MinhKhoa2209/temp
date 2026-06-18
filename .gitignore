@@ -20,3 +20,7 @@ docs/w10_*html
 
 # OS
 .DS_Store
+
+# Cosign keys (never commit private keys)
+cosign.key
+*.key
