@@ -69,6 +69,13 @@ spec:
             timeoutSeconds: 15
             failureThreshold: 12
 
+        # Disable false positive alerts for Minikube
+        defaultRules:
+          rules:
+            etcd: false                    # Minikube etcd không expose metrics
+            kubeSchedulerAlerting: false   # Minikube scheduler không expose metrics
+            kubeControllerManager: false   # Minikube controller-manager không expose metrics
+
         prometheus:
           prometheusSpec:
             serviceMonitorSelectorNilUsesHelmValues: false
