@@ -9,6 +9,6 @@ spec:
     kinds:
     - apiGroups: [""]
       kinds: ["Pod"]
-    namespaces: ["demo", "payments"]
+    namespaces: ["demo"]
   parameters:
     tags: ["latest"]

@@ -188,12 +188,6 @@ ArgoCD applications deploy in order:
 - Wave 1: `app-analysis`, `app-alert` (configuration)
 - Wave 2: `app-api` (application)
 
-## Take-Home Challenge: Team Payments
-
-Tenant `payments` is onboarded with its own namespace, namespaced RBAC, compute quota, default container limits, and NetworkPolicy isolation. The workload is deployed through separate Argo CD applications so tenant guardrails are applied before the app syncs.
-
-Guardrail cũ tự áp cho team B vì Gatekeeper constraints chạy ở admission cấp cluster và hiện match cả namespace `demo` lẫn `payments`; khi manifest mới vào namespace `payments`, API server vẫn gọi Gatekeeper để kiểm tra cùng bộ luật. Lab này dùng `Role` + `RoleBinding` thay vì `ClusterRoleBinding` để quyền của `payments-dev` chỉ nằm trong namespace `payments`, không với sang `demo` hoặc tài nguyên cấp cluster.
-
 ## Cleanup
 
 ```bash
