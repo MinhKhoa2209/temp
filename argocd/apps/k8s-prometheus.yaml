@@ -68,13 +68,11 @@ spec:
             initialDelaySeconds: 30
             timeoutSeconds: 15
             failureThreshold: 12
-
-        # Disable false positive alerts for Minikube
         defaultRules:
           rules:
-            etcd: false                    # Minikube etcd không expose metrics
-            kubeSchedulerAlerting: false   # Minikube scheduler không expose metrics
-            kubeControllerManager: false   # Minikube controller-manager không expose metrics
+            etcd: false                   
+            kubeSchedulerAlerting: false   
+            kubeControllerManager: false   
 
         prometheus:
           prometheusSpec:
@@ -94,6 +92,9 @@ spec:
               - receiver: 'null'
                 matchers:
                 - alertname = "Watchdog"
+              - receiver: 'null'
+                matchers:
+                - namespace = "w10-supply-chain-lab"  # Silence demo namespace
             receivers:
             - name: 'null'
             - name: 'email-notifications'
