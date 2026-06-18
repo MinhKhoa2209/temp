@@ -19,6 +19,21 @@ spec:
             enabled: false
             patch:
               enabled: false
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            initialDelaySeconds: 30
+            timeoutSeconds: 15
+            failureThreshold: 12
+          readinessProbe:
+            initialDelaySeconds: 30
+            timeoutSeconds: 15
+            failureThreshold: 12
 
         kube-state-metrics:
           resources:
@@ -28,6 +43,23 @@ spec:
             limits:
               cpu: 300m
               memory: 256Mi
+          livenessProbe:
+            initialDelaySeconds: 30
+            timeoutSeconds: 15
+            failureThreshold: 12
+          readinessProbe:
+            initialDelaySeconds: 30
+            timeoutSeconds: 15
+            failureThreshold: 12
+
+        prometheus-node-exporter:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
           livenessProbe:
             initialDelaySeconds: 30
             timeoutSeconds: 15
