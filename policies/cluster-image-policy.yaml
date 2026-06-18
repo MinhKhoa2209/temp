@@ -6,9 +6,11 @@ spec:
   images:
   - glob: ghcr.io/minhkhoa2209/w10-api:*
   authorities:
-  - key:
+  - name: authority-0
+    key:
       data: |
         -----BEGIN PUBLIC KEY-----
         MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEeCurKK2G+vXuoFu0sCDZ9yT/5Fg
         x/aLaY01FYhkhts87VF+s+tYO/akBcVjT4og0ho+StvKJURdoiKqXWhtLg==
         -----END PUBLIC KEY-----
+  mode: enforce
