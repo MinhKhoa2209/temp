@@ -1,0 +1,16 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredResources
+metadata:
+  name: require-resource-limits
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  match:
+    kinds:
+    - apiGroups: [""]
+      kinds: ["Pod"]
+    namespaces: ["demo"]
+  parameters:
+    limits:
+    - cpu
+    - memory

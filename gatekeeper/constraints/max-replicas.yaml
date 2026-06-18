@@ -1,0 +1,14 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sMaxReplicas
+metadata:
+  name: max-replicas
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  match:
+    kinds:
+    - apiGroups: ["apps"]
+      kinds: ["Deployment"]
+    namespaces: ["demo"]
+  parameters:
+    maxReplicas: 5

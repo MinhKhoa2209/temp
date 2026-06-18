@@ -1,8 +1,7 @@
-# ArgoCD App: Deploy PrometheusRule cho SLO alerts
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: alert
+  name: rbac
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -10,11 +9,11 @@ spec:
   project: default
   source:
     repoURL: https://github.com/MinhKhoa2209/temp.git
-    path: app-alert
+    path: rbac
     targetRevision: main
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: demo
   syncPolicy:
     automated:
       prune: true

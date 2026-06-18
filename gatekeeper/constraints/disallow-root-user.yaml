@@ -1,0 +1,15 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPSPAllowedUsers
+metadata:
+  name: disallow-root-user
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  match:
+    kinds:
+    - apiGroups: [""]
+      kinds: ["Pod"]
+    namespaces: ["demo"]
+  parameters:
+    runAsUser:
+      rule: MustRunAsNonRoot

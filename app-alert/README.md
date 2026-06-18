@@ -5,7 +5,7 @@
 ### 1. Tạo Gmail App Password
 ```bash
 open https://myaccount.google.com/apppasswords
-# Tạo password mới, copy 16 ký tự
+# Tạo password mới cho minhkhoaoik2209@gmail.com, copy 16 ký tự
 ```
 
 ### 2. Apply Email Secret

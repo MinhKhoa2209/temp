@@ -1,8 +1,7 @@
-# ArgoCD App: Deploy PrometheusRule cho SLO alerts
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: alert
+  name: gatekeeper-policies
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -10,14 +9,17 @@ spec:
   project: default
   source:
     repoURL: https://github.com/MinhKhoa2209/temp.git
-    path: app-alert
+    path: gatekeeper
     targetRevision: main
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: gatekeeper-system
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
     - ServerSideApply=true
+    - SkipDryRunOnMissingResource=true
