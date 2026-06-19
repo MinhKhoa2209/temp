@@ -11,6 +11,10 @@ spec:
     repoURL: https://open-policy-agent.github.io/gatekeeper/charts
     chart: gatekeeper
     targetRevision: 3.22.2
+    helm:
+      values: |
+        upgradeCRDs:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: gatekeeper-system
