@@ -227,7 +227,7 @@ Vì egress bị giới hạn, pod trong `payments` không gọi được service
 
 ### `apps/payments/deployment.yaml`
 
-Deploy app team B qua GitOps. Manifest dùng lại image đã ký `ghcr.io/minhkhoa2209/w10-api:0.0.1`, đặt `VERSION=payments-v0.0.1`, chạy non-root và có đủ CPU/memory requests + limits để pass Gatekeeper.
+Deploy app team B qua GitOps. Manifest dùng lại image đã ký `ghcr.io/minhkhoa2209/w10-api@sha256:616ae00b4ad60d69be24ba476e1ab87d6f2c7b9a3195caa90dccaa7ef1c46705`, đặt `VERSION=payments-v0.0.1`, chạy non-root và có đủ CPU/memory requests + limits để pass Gatekeeper/Sigstore.
 
 ### `runbooks/payments-violating-pod.yaml`
 

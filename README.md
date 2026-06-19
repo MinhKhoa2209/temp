@@ -205,7 +205,7 @@ Team `payments` có namespace riêng, Role/RoleBinding riêng, quota/limit riên
 - `tenants/payments/rbac.yaml`: user `payments-dev` chỉ quản workload trong namespace `payments`; không có quyền với `secrets`, `roles` hoặc `rolebindings`.
 - `tenants/payments/quota.yaml`: đặt `ResourceQuota` và `LimitRange` để giới hạn ngân sách tài nguyên.
 - `tenants/payments/networkpolicy.yaml`: default-deny ingress và chỉ cho egress cùng namespace + DNS, nên pod `payments` không gọi sang service `demo/api`.
-- `apps/payments/*`: deploy app team B bằng image đã ký và manifest có đủ non-root + resource limits.
+- `apps/payments/*`: deploy app team B bằng image đã ký, pin digest và manifest có đủ non-root + resource limits.
 
 Guardrail Gatekeeper cũ vẫn được dùng lại: các constraint trong `gatekeeper/constraints` chỉ được mở rộng match thêm namespace `payments`, không tạo policy/template mới.
 
