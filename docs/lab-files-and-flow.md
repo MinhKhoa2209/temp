@@ -193,7 +193,7 @@ Policy chỉ match namespace workload (`demo`, `payments`) để tránh chặn n
 
 ### `tenants/payments/namespace.yaml`
 
-Tạo namespace `payments` cho team mới. Namespace này có label `policy.sigstore.dev/include=true` để Sigstore Policy Controller kiểm tra chữ ký image theo `ClusterImagePolicy` cũ.
+Tạo namespace `payments` cho team mới. Namespace này không commit secret và dùng các guardrail Gatekeeper hiện hữu để kiểm soát workload team B.
 
 ### `tenants/payments/rbac.yaml`
 

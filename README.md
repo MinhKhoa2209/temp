@@ -201,7 +201,7 @@ ArgoCD applications deploy in order:
 
 Team `payments` có namespace riêng, Role/RoleBinding riêng, quota/limit riêng và NetworkPolicy riêng:
 
-- `tenants/payments/namespace.yaml`: tạo namespace `payments` và bật Sigstore admission label.
+- `tenants/payments/namespace.yaml`: tạo namespace `payments`.
 - `tenants/payments/rbac.yaml`: user `payments-dev` chỉ quản workload trong namespace `payments`; không có quyền với `secrets`, `roles` hoặc `rolebindings`.
 - `tenants/payments/quota.yaml`: đặt `ResourceQuota` và `LimitRange` để giới hạn ngân sách tài nguyên.
 - `tenants/payments/networkpolicy.yaml`: default-deny ingress và chỉ cho egress cùng namespace + DNS, nên pod `payments` không gọi sang service `demo/api`.
