@@ -33,6 +33,10 @@ w10/
 │   └── README.md         # Alert setup guide
 ├── app-common/           # Common resources
 │   └── demo-namespace.yaml # Namespace demo
+├── tenants/
+│   └── payments/         # Namespace, RBAC, quota, limit, NetworkPolicy cho team payments
+├── apps/
+│   └── payments/         # Workload GitOps của team payments
 ├── src/                  # Source code
 │   └── api/              # Flask API application
 ├── argocd/
@@ -41,6 +45,8 @@ w10/
 │   │   ├── app-analysis.yaml # Deploy AnalysisTemplate
 │   │   ├── app-alert.yaml # Deploy PrometheusRule
 │   │   ├── app-common.yaml # Deploy common resources
+│   │   ├── payments.yaml # Deploy tenant resources cho payments
+│   │   ├── payments-app.yaml # Deploy workload team payments
 │   │   ├── k8s-prometheus.yaml # Prometheus + AlertManager
 │   │   └── k8s-rollout.yaml # Argo Rollouts controller
 │   └── root.yaml         # App of Apps pattern
@@ -94,6 +100,8 @@ kubectl apply -f app-alert/email-secret.yaml
 
 ### GitOps Applications
 - `app-api`: API Rollout với canary strategy
+- `payments`: Namespace, RBAC, ResourceQuota, LimitRange và NetworkPolicy cho team payments
+- `payments-app`: Workload riêng của team payments
 - `app-analysis`: AnalysisTemplate cho automated validation
 - `app-alert`: PrometheusRule cho runtime alerting
 - `app-common`: Shared resources (namespace)
@@ -184,9 +192,64 @@ git push origin main
 ### Sync Waves
 ArgoCD applications deploy in order:
 - Wave -1: `app-common` (namespace)
+- Wave -1: `payments` (namespace + tenant guardrails)
 - Wave 0: `k8s-prometheus`, `k8s-rollout` (infrastructure)
 - Wave 1: `app-analysis`, `app-alert` (configuration)
-- Wave 2: `app-api` (application)
+- Wave 2: `app-api`, `payments-app` (applications)
+
+## Onboard Team Payments
+
+Team `payments` có namespace riêng, Role/RoleBinding riêng, quota/limit riêng và NetworkPolicy riêng:
+
+- `tenants/payments/namespace.yaml`: tạo namespace `payments` và bật Sigstore admission label.
+- `tenants/payments/rbac.yaml`: user `payments-dev` chỉ quản workload trong namespace `payments`; không có quyền với `secrets`, `roles` hoặc `rolebindings`.
+- `tenants/payments/quota.yaml`: đặt `ResourceQuota` và `LimitRange` để giới hạn ngân sách tài nguyên.
+- `tenants/payments/networkpolicy.yaml`: default-deny ingress và chỉ cho egress cùng namespace + DNS, nên pod `payments` không gọi sang service `demo/api`.
+- `apps/payments/*`: deploy app team B bằng image đã ký và manifest có đủ non-root + resource limits.
+
+Guardrail Gatekeeper cũ vẫn được dùng lại: các constraint trong `gatekeeper/constraints` chỉ được mở rộng match thêm namespace `payments`, không tạo policy/template mới.
+
+Vì sao guardrail cũ tự áp cho team B? Gatekeeper constraint là policy cấp cluster, nên khi thêm `payments` vào `spec.match.namespaces`, cùng luật `disallow-latest`, `require-resource-limits`, `disallow-root-user`, `disallow-host-network` và `max-replicas` tự kiểm tra tenant mới mà không cần viết lại template.
+
+Vì sao Role/RoleBinding giữ cô lập tốt hơn ClusterRoleBinding? RoleBinding `payments-dev` chỉ trỏ tới Role trong namespace `payments`, còn ClusterRoleBinding sẽ cấp quyền theo phạm vi cluster và dễ làm user team B chạm sang namespace/team khác.
+
+Kiểm tra RBAC:
+
+```bash
+kubectl auth can-i create deploy -n payments --as payments-dev
+kubectl auth can-i create deploy -n demo --as payments-dev
+kubectl auth can-i get secret -n payments --as payments-dev
+kubectl auth can-i create rolebinding -n payments --as payments-dev
+```
+
+Kỳ vọng lần lượt: `yes`, `no`, `no`, `no`.
+
+Kiểm tra workload và quota:
+
+```bash
+kubectl get application payments payments-app -n argocd
+kubectl get deploy,svc,quota,limitrange -n payments
+kubectl apply --dry-run=server -f runbooks/payments-default-limits-pod.yaml
+```
+
+Kỳ vọng pod `payments-default-limits` được admit và tự có default request/limit, còn pod `payments-over-quota` bị quota từ chối.
+
+Kiểm tra NetworkPolicy cần CNI có enforce NetworkPolicy, ví dụ minikube chạy với Calico:
+
+```bash
+kubectl run payments-curl -n payments --image=curlimages/curl:latest --rm -i --restart=Never -- \
+  curl -m 5 http://api.demo.svc.cluster.local
+```
+
+Kỳ vọng request timeout hoặc bị chặn.
+
+Kiểm tra constraint cũ chặn manifest vi phạm trong `payments`:
+
+```bash
+kubectl apply --dry-run=server -f runbooks/payments-violating-pod.yaml
+```
+
+Kỳ vọng bị reject vì image dùng tag `latest`, thiếu resource limits và không khai báo non-root.
 
 ## Cleanup
 

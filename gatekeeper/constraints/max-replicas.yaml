@@ -9,6 +9,6 @@ spec:
     kinds:
     - apiGroups: ["apps"]
       kinds: ["Deployment"]
-    namespaces: ["demo"]
+    namespaces: ["demo", "payments"]
   parameters:
     maxReplicas: 5

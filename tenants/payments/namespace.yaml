@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: payments
+  labels:
+    policy.sigstore.dev/include: "true"
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
