@@ -8,7 +8,7 @@ spec:
     runAsNonRoot: true
   containers:
   - name: api
-    image: ghcr.io/minhkhoa2209/w10-api@sha256:616ae00b4ad60d69be24ba476e1ab87d6f2c7b9a3195caa90dccaa7ef1c46705
+    image: ghcr.io/minhkhoa2209/w10-api:0.0.1
     command: ["sh", "-c", "sleep 3600"]
     securityContext:
       runAsUser: 1000
@@ -25,7 +25,7 @@ spec:
     runAsNonRoot: true
   containers:
   - name: api
-    image: ghcr.io/minhkhoa2209/w10-api@sha256:616ae00b4ad60d69be24ba476e1ab87d6f2c7b9a3195caa90dccaa7ef1c46705
+    image: ghcr.io/minhkhoa2209/w10-api:0.0.1
     command: ["sh", "-c", "sleep 3600"]
     securityContext:
       runAsUser: 1000
