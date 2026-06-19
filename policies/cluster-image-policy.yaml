@@ -5,6 +5,7 @@ metadata:
 spec:
   images:
   - glob: ghcr.io/minhkhoa2209/w10-api:*
+  - glob: ghcr.io/minhkhoa2209/w10-api@sha256:*
   authorities:
   - name: authority-0
     key:

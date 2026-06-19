@@ -308,6 +308,7 @@ Tạo Sigstore `ClusterImagePolicy` để require chữ ký Cosign cho image:
 
 ```text
 ghcr.io/minhkhoa2209/w10-api:*
+ghcr.io/minhkhoa2209/w10-api@sha256:*
 ```
 
 Policy đang ở `mode: enforce`, nghĩa là image không có chữ ký hợp lệ sẽ bị admission reject khi policy-controller được bật cho namespace phù hợp.
